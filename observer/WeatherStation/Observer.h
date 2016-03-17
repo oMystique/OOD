@@ -47,7 +47,8 @@ public:
 	void NotifyObservers() override
 	{
 		T data = GetChangedData();
-		for (auto it = m_observers.rbegin(); it != m_observers.rend(); ++it)
+		auto observers = m_observers;
+		for (auto it = observers.rbegin(); it != observers.rend(); ++it)
 		{
 			it->second->Update(data);
 		}
