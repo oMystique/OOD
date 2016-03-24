@@ -229,4 +229,15 @@ int main()
 															
 		cout << beverage->GetDescription() << " costs " << beverage->GetCost() << endl;
 	}
+
+	{
+		auto beverage =
+			make_unique<CTea>(TeaType::carcade)	
+			<< MakeCondiment<CCream>()	
+			<< MakeCondiment<CChocolateSlice>(5)		
+			<< MakeCondiment<CLiquor>(LiquorType::chocolate);
+
+															// Выписываем счет покупателю
+		cout << beverage->GetDescription() << " costs " << beverage->GetCost() << endl;
+	}
 }
