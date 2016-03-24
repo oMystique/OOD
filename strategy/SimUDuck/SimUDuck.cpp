@@ -38,33 +38,17 @@ struct IFlyBehavior
 	virtual void Fly() = 0;
 };
 
-class FlightCounter
-{
-public:
-	void IncrementFlightCounter()
-	{
-		m_flightCounter++;
-	}
-	int GetFlightCounter()
-	{
-		return m_flightCounter;
-	}
-private:
-	int m_flightCounter;
-};
-
 class FlyWithWings : public IFlyBehavior
 {
 public:
-	FlyWithWings() : m_pFlightCounter(make_unique<FlightCounter>()) {}
 	void Fly() override
 	{
 		cout << "I'm flying with wings!!";
-		m_pFlightCounter->IncrementFlightCounter();
-		cout << " And its my " << m_pFlightCounter->GetFlightCounter() << " flight" << endl;
+		++m_flightCounter;
+		cout << " And its my " << m_flightCounter << " flight" << endl;
 	}
 private:
-	unique_ptr<FlightCounter> m_pFlightCounter;
+	unsigned m_flightCounter = 0;
 };
 
 class FlyNoWay : public IFlyBehavior
@@ -109,6 +93,7 @@ public:
 	Duck(unique_ptr<IFlyBehavior> && flyBehavior, unique_ptr<IQuackBehavior> && quackBehavior, unique_ptr<IDanceBehavior> && danceBehavior)
 		: m_quackBehavior(move(quackBehavior)), m_danceBehavior(move(danceBehavior))
 	{
+		assert(m_danceBehavior);
 		assert(m_quackBehavior);
 		SetFlyBehavior(move(flyBehavior));
 	}
@@ -124,7 +109,7 @@ public:
 	{
 		m_flyBehavior->Fly();
 	}
-	virtual void Dance()
+	void Dance()
 	{
 		m_danceBehavior->Dance();
 	}
@@ -234,5 +219,7 @@ void main()
 	ModelDuck modelDuck;
 	PlayWithDuck(modelDuck);
 	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>());
+	PlayWithDuck(modelDuck);
+	PlayWithDuck(modelDuck);
 	PlayWithDuck(modelDuck);
 }
