@@ -22,8 +22,13 @@ private:
 		Классу CObservable он будет доступен все равно, т.к. в интерфейсе IObserver он
 		остается публичным
 	*/
-	void Update(SWeatherInfo const& data) override
+	void Update(SWeatherInfo const& data, string const &stationType) override
 	{
+		if (!stationType.empty())
+		{
+			cout << "Information from " << stationType << " station:" << endl;
+		}
+
 		std::cout << "Current Temp " << data.temperature << std::endl;
 		std::cout << "Current Hum " << data.humidity << std::endl;
 		std::cout << "Current Pressure " << data.pressure << std::endl;
@@ -68,8 +73,13 @@ private:
 		std::cout << "----------------" << std::endl;
 	}
 
-	void Update(SWeatherInfo const& data) override
+	void Update(SWeatherInfo const& data, std::string const &stationType) override
 	{
+		if (!stationType.empty())
+		{
+			cout << "Information from " << stationType << " station:" << endl;
+		}
+
 		SetStatsData(m_tempStats, data.temperature);
 		PrintStatsData(m_tempStats, "Temp");
 
@@ -88,6 +98,8 @@ private:
 class CWeatherData : public CObservable<SWeatherInfo>
 {
 public:
+	CWeatherData(std::string stationType = "") : CObservable(stationType) 
+	{}
 	// Температура в градусах Цельсия
 	double GetTemperature()const
 	{

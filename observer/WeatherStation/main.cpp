@@ -3,7 +3,7 @@
 
 int main()
 {
-	CWeatherData wd;
+	CWeatherData wd("outer");
 
 	shared_ptr<CDisplay> display = make_shared<CDisplay>();
 	wd.RegisterObserver(display.get(), 3);

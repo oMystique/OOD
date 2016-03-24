@@ -13,7 +13,7 @@ template <typename T>
 class IObserver
 {
 public:
-	virtual void Update(T const& data) = 0;
+	virtual void Update(T const& data, std::string const &stationType) = 0;
 	virtual ~IObserver() = default;
 };
 
@@ -37,6 +37,10 @@ template <class T>
 class CObservable : public IObservable<T>
 {
 public:
+	CObservable(std::string const &stationType) :
+		m_stationType(stationType)
+	{};
+
 	typedef IObserver<T> ObserverType;
 
 	void RegisterObserver(ObserverType * observer, int priority) override
@@ -50,7 +54,7 @@ public:
 		auto observers = m_observers;
 		for (auto it = observers.rbegin(); it != observers.rend(); ++it)
 		{
-			it->second->Update(data);
+			it->second->Update(data, m_stationType);
 		}
 	}
 
@@ -73,4 +77,5 @@ protected:
 
 private:
 	std::map<int, ObserverType*> m_observers;
+	std::string m_stationType;
 };
